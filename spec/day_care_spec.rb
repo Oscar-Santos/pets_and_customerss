@@ -1,57 +1,54 @@
-require 'rspec'
-require './lib/day_care'
-require './lib/customer'
 require './lib/pet'
+require './lib/customer'
+require './day_care'
 
-describe DayCare do
-  it 'test_it_exists' do
-    day_care = DayCare.new("The Dog Spot")
-    expect(day_care).to be_a DayCare
+RSpec.describe DayCare do
+  it 'exists' do
+    daycare = DayCare.new("The Caring Guys")
+    expect(daycare).to be_a(DayCare)
   end
 
-  it 'test_it_has_a_name' do
-    day_care = DayCare.new("The Dog Spot")
-    expect(day_care.name).to eq("The Dog Spot")
+  it 'has info' do
+    daycare = DayCare.new("The Caring Guys")
+    expect(daycare.name).to eq("The Caring Guys")
+    expect(daycare.customers).to eq([])
   end
 
-  it 'test_it_starts_with_no_customers' do
-    day_care = DayCare.new("The Dog Spot")
-    expect(day_care.customers).to eq([])
-    end
-
-  it 'test_it_can_add_customers' do
-    day_care = DayCare.new("The Dog Spot")
+  it 'can add customers' do
+    daycare = DayCare.new("The Caring Guys")
     joel = Customer.new("Joel", 2)
-    billy = Customer.new("Billy", 3)
-    day_care.add_customer(joel)
-    day_care.add_customer(billy)
-    expect(day_care.customers).to eq([joel, billy])
+    billy = Customer.new("billy", 8)
+
+    daycare.add_customer(joel)
+    daycare.add_customer(billy)
+    expect(daycare.customers).to eq([joel, billy])
   end
 
-  it 'test_it_can_list_unfed_pets' do
+  it 'can find customer by his id' do
     joel = Customer.new("Joel", 2)
-    samson = Pet.new({name: "Samson", type: :dog})
-    lucy = Pet.new({name: "Lucy", type: :cat})
+    billy = Customer.new("billy", 8)
+
+    daycare = DayCare.new("The Caring Guys")
+    daycare.add_customer(joel)
+    daycare.add_customer(billy)
+    expect(daycare.customer_by_id(2)).to eq(joel)
+  end
+
+  it 'can list all unfed pets' do
+    joel = Customer.new("Joel", 2)
+    samson = Pet.new({name: "Samson", type: :dog, age: 3})
+    lucy = Pet.new({name: "Lucy", type: :cat, age: 12})
     joel.adopt(samson)
     joel.adopt(lucy)
-    billy = Customer.new("Billy", 3)
-    molly = Pet.new({name: "Molly", type: :cat})
-    billy.adopt(molly)
-    day_care = DayCare.new("The Dog Spot")
-    day_care.add_customer(joel)
-    day_care.add_customer(billy)
-    lucy.feed
+    samson.feed
 
-    expect(day_care.unfed_pets).to eq([samson, molly])
-  end
+    billy = Customer.new("billy", 8)
+    venus = Pet.new({name: "Venus", type: :cat, age: 1})
+    billy.adopt(venus)
 
-  it 'test_it_can_find_customer_by_id' do
-    joel = Customer.new("Joel", 2)
-    joel.charge(10)
-    billy = Customer.new("Billy", 3)
-    day_care = DayCare.new("The Dog Spot")
-    day_care.add_customer(joel)
-    day_care.add_customer(billy)
-    expect(day_care.customer_by_id(2)).to eq joel
+    daycare = DayCare.new("The Caring Guys")
+    daycare.add_customer(joel)
+    daycare.add_customer(billy)
+    expect(daycare.unfed_pets).to eq([lucy, venus])
   end
 end

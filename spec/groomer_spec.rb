@@ -1,55 +1,51 @@
-require 'rspec'
-require './lib/groomer'
-require './lib/customer'
 require './lib/pet'
+require './lib/customer'
+require './lib/groomer'
 
-describe Groomer do
-  it 'test_it_exists' do
-    groomer = Groomer.new("The Hair Ball")
-    expect(groomer).to be_a Groomer
+RSpec.describe Groomer do
+  it 'exists' do
+    groomer = Groomer.new("The Hair Specialists")
+    expect(groomer).to be_a(Groomer)
   end
 
-  it 'test_it_has_a_name' do
-    groomer = Groomer.new("The Hair Ball")
-    expect(groomer.name).to eq "The Hair Ball"
-  end
-
-  it 'test_it_starts_with_no_customers' do
-    groomer = Groomer.new("The Hair Ball")
+  it 'has info' do
+    groomer = Groomer.new("The Hair Specialists")
+    expect(groomer.name).to eq("The Hair Specialists")
     expect(groomer.customers).to eq([])
   end
 
-  it 'test_it_can_add_customers' do
-    groomer = Groomer.new("The Hair Ball")
+  it 'can add customers' do
+    groomer = Groomer.new("The Hair Specialists")
     joel = Customer.new("Joel", 2)
-    billy = Customer.new("Billy", 3)
+    billy = Customer.new("Billy", 8)
+
     groomer.add_customer(joel)
     groomer.add_customer(billy)
     expect(groomer.customers).to eq([joel, billy])
   end
 
-  it 'test_it_can_count_the_number_of_pets_of_a_certain_type' do
+  it 'can find all customers with outstanding balances' do
     joel = Customer.new("Joel", 2)
-    samson = Pet.new({name: "Samson", type: :dog})
-    lucy = Pet.new({name: "Lucy", type: :cat})
-    joel.adopt(samson)
-    joel.adopt(lucy)
-    billy = Customer.new("Billy", 3)
-    molly = Pet.new({name: "Molly", type: :cat})
-    billy.adopt(molly)
-    groomer = Groomer.new("The Hair Ball")
+    joel.charge(22)
+    billy = Customer.new("Billy", 8)
+    groomer = Groomer.new("The Hair Specialists")
     groomer.add_customer(joel)
     groomer.add_customer(billy)
-    expect(groomer.number_of_pets(:cat)).to eq 2
+    expect(groomer.customers_w_o_b).to eq([joel])
   end
 
-  it 'test_it_can_list_customers_with_outstanding_balances' do
+  it 'can count number of pets of a given type' do
     joel = Customer.new("Joel", 2)
-    joel.charge(10)
-    billy = Customer.new("Billy", 3)
-    groomer = Groomer.new("The Hair Ball")
+    lucy = Pet.new({name: "Lucy", type: :cat, age: 12})
+    joel.adopt(lucy)
+    billy = Customer.new("Billy", 8)
+    venus = Pet.new({name: "Venus", type: :cat, age: 1})
+    billy.adopt(venus)
+
+    groomer = Groomer.new("The Hair Specialists")
     groomer.add_customer(joel)
     groomer.add_customer(billy)
-    expect(groomer.customers_with_oustanding_balances).to eq([joel])
+    expect(groomer.number_of_pets(:cat)).to eq(2)
+
   end
 end

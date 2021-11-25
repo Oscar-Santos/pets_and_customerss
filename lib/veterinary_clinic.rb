@@ -1,4 +1,4 @@
-class DayCare
+class VeterinaryClinic
 
   attr_reader :name,
               :customers
@@ -11,18 +11,19 @@ class DayCare
     @customers << customer
   end
 
-  def customer_by_id(id)
-    @customers.find do |customer|
-      customer.id == id
-    end
-  end
-
-  def unfed_pets
+  def pets_sorted_by_age
     result = @customers.map do |customer|
       customer.pets
     end.flatten
-    result.find_all do |pet|
-      pet.fed? == false
+    result.sort_by do |pet|
+      pet.age
+    end.reverse
+  end
+
+  def number_of_pets(customer)
+    @customers.count do |customer|
+      customer.pets
     end
   end
+
 end

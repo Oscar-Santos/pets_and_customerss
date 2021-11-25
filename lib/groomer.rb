@@ -1,7 +1,7 @@
 class Groomer
+
   attr_reader :name,
               :customers
-
   def initialize(name)
     @name = name
     @customers = []
@@ -11,17 +11,17 @@ class Groomer
     @customers << customer
   end
 
-  def customers_with_oustanding_balances
+  def customers_w_o_b
     @customers.find_all do |customer|
-      customer.outstanding_balance != 0
+      customer.outstanding_balance > 0
     end
   end
 
   def number_of_pets(type)
-    pets = @customers.map do |customer|
+    result = @customers.map do |customer|
       customer.pets
     end.flatten
-    pets.count do |pet|
+    result.count do |pet|
       pet.type == type
     end
   end
